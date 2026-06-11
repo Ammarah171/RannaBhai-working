@@ -1,0 +1,6 @@
+{
+  "name": "rannbhai-backend",
+  "description": "RannBhai Backend API",
+  "buildCommand": "npm install",
+  "startCommand": "node index.js"
+}

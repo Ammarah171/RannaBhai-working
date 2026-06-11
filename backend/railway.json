@@ -1,0 +1,9 @@
+{
+  "name": "rannbhai-backend",
+  "version": "1.0.0",
+  "description": "RannBhai Backend API",
+  "main": "index.js",
+  "engines": {
+    "node": "18.x"
+  }
+}
