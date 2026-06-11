@@ -24,60 +24,64 @@ const createIcon = (color) => {
   });
 };
 
+function toRad(value) {
+  return value * Math.PI / 180;
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
 const NearMe = () => {
-  const [userLocation, setUserLocation] = useState({
+  const [userLocation] = useState({
     lat: 23.77326103896032,
     lng: 90.42502754515279
   });
-  function toRad(value) {
-    return value * Math.PI / 180;
-  }
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
-  }
-  const fetchStores = async () => {
-    try {
-      const response = await axios.get(`${API.BASE_URL}/stores`, {
-        params: {
-          latitude: userLocation.lat,
-          longitude: userLocation.lng,
-          radius: 5 // 5km radius
-        }
-      });
-      
-      const processedStores = response.data.map(store => ({
-        id: store._id,
-        name: store.name,
-        address: store.address,
-        lat: store.location.coordinates[1],
-        lng: store.location.coordinates[0],
-        distance: calculateDistance(
-          userLocation.lat,
-          userLocation.lng,
-          store.location.coordinates[1],
-          store.location.coordinates[0]
-        )
-      }));
-      const storesWithin5km = processedStores.filter(store => store.distance <= 5);
-    
-      const sortedStores = storesWithin5km.sort((a, b) => a.distance - b.distance);
-      setNearbyStores(sortedStores);
-      
-    } catch (err) {
-      console.error('Error fetching stores:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+
   useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        const response = await axios.get(`${API.BASE_URL}/stores`, {
+          params: {
+            latitude: userLocation.lat,
+            longitude: userLocation.lng,
+            radius: 5 // 5km radius
+          }
+        });
+        
+        const processedStores = response.data.map(store => ({
+          id: store._id,
+          name: store.name,
+          address: store.address,
+          lat: store.location.coordinates[1],
+          lng: store.location.coordinates[0],
+          distance: calculateDistance(
+            userLocation.lat,
+            userLocation.lng,
+            store.location.coordinates[1],
+            store.location.coordinates[0]
+          )
+        }));
+        const storesWithin5km = processedStores.filter(store => store.distance <= 5);
+      
+        const sortedStores = storesWithin5km.sort((a, b) => a.distance - b.distance);
+        setNearbyStores(sortedStores);
+      
+      } catch (err) {
+        console.error('Error fetching stores:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchStores();
   }, [userLocation]);
   

@@ -16,9 +16,10 @@ const RecipeOfTheDay = () => {
         const response = await axios.get(`${API.BASE_URL}/recipe-of-the-day`);
         console.log(response.data);
         setRecipe(response.data);
-        setLoading(false);
       } catch (err) {
-        setError("Failed to fetch Recipe of the Day");
+        setError('Failed to fetch Recipe of the Day');
+      } finally {
+        setLoading(false);
       }
     };
     fetchRecipeOfTheDay();
@@ -27,6 +28,10 @@ const RecipeOfTheDay = () => {
   const today = new Date();
   if (loading) {
     return <div className="rop-loading">Loading Recipe of the Day...</div>;
+  }
+
+  if (error) {
+    return <div className="rop-loading">{error}</div>;
   }
 
   return (
