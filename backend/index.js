@@ -17,6 +17,11 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+
+app.get('/', (req, res) => {
+    res.send('Backend is running');
+});
+
 app.use('/', routesHandler)
 
 const PORT = process.env.PORT

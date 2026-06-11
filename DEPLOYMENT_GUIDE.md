@@ -88,13 +88,13 @@ This guide will help you deploy your MERN stack application to production using:
 1. **Edit `.env.production`**
    ```
    # Replace with your Railway/Render backend URL
-   REACT_APP_API_URL=https://your-backend-url.com
+   REACT_APP_API_URL=https://rannabhai-working-production.up.railway.app/
    ```
 
 2. **Update CORS in Backend**
    - Update `backend/.env.production`:
      ```
-     FRONTEND_URL=https://yourdomain.com
+     FRONTEND_URL=https://rannabhai.vercel.app
      ```
 
 ### Install API Configuration
@@ -136,7 +136,7 @@ const response = await axios.get(API.ENDPOINTS.ABOUT_US);
    - Click "Environment Variables"
    - Add:
      ```
-     REACT_APP_API_URL=https://your-backend-url.com
+     REACT_APP_API_URL=https://rannabhai-working-production.up.railway.app/
      ```
 
 5. **Deploy**
@@ -202,7 +202,7 @@ axios.get(API.ENDPOINTS.RECIPE_DETAILS(recipeId));
    - Verify API calls reach backend
 
 2. **Test Backend**
-   - Visit `https://your-backend-url.com/health` (if you have health check)
+   - Visit `https://rannabhai-working.railway.internal/health` (if you have health check)
    - Check MongoDB connection logs
    - Verify environment variables are loaded
 
